@@ -1,40 +1,48 @@
-"use client";
+// components/UserList.tsx
 
-import { useCallback, useMemo, useState } from "react";
-import { useFetch } from "@/hooks/useFetch";
+'use client';  // Marca este componente como Client Component
 
-type User = {
-    id: number;
-    name: string;
-    email: string;
-};
+import { useState, useEffect } from 'react';
+import { useUserStore } from '@/store/userStore';  // Usamos la tienda de usuarios
+import { getUsers } from '@/services/userService';  // Importamos el servicio que obtiene los usuarios
+import { HttpError } from '@/errors/HttpError';  // Importamos la clase HttpError
 
 export default function UserList() {
-    const { data: users, loading, error } = useFetch<User[]>("https://jsonplaceholder.typicode.com/users");
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);  // Para gestionar el estado de carga
+    const [error, setError] = useState<string | null>(null);  // Para gestionar los errores
+    const users = useUserStore((state) => state.users);  // Obtenemos los usuarios desde la tienda de zustand
+    const setUsers = useUserStore((state) => state.setUsers);  // Usamos la tienda para actualizar los usuarios
 
-    const sortedUsers = useMemo(() => users?.sort((a, b) => a.name.localeCompare(b.name)) ?? [], [users]);
-    const selectUser = useCallback((user: User) => setSelectedUser(user), []);
+    useEffect(() => {
+        async function fetchUsers() {
+            try {
+                const users = await getUsers();  // Llamamos al servicio getUsers
+                setUsers(users);  // Actualizamos el estado global con los usuarios
+            } catch (error: unknown) {
+                // Aquí refinamos el tipo de error usando 'instanceof'
+                if (error instanceof HttpError) {
+                    // Si el error es una instancia de HttpError, lo manejamos como un error HTTP
+                    setError(`Error fetching users: ${error.message} (Status Code: ${error.statusCode})`);
+                } else {
+                    // Si no es un HttpError, lo tratamos como un error genérico
+                    setError('An unexpected error occurred');
+                }
+            } finally {
+                setLoading(false);  // Terminamos la carga sin importar si hubo un error o no
+            }
+        }
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+        fetchUsers();  // Ejecutamos la función para obtener los usuarios
+    }, [setUsers]);  // Solo se ejecuta una vez cuando el componente se monta
+
+    if (loading) return <div>Loading...</div>;  // Muestra el mensaje de carga mientras obtenemos los datos
+    if (error) return <div>{error}</div>;  // Muestra el mensaje de error si algo sale mal
 
     return (
-        <div>
-            <h1>User List</h1>
-            <ul>
-                {sortedUsers.map((user) => (
-                    <li key={user.id} onClick={() => selectUser(user)}>
-                        {user.name}
-                    </li>
-                ))}
-            </ul>
-            {selectedUser && (
-                <div>
-                    <h2>{selectedUser.name}</h2>
-                    <p>Email: {selectedUser.email}</p>
-                </div>
-            )}
-        </div>
+        <ul>
+            {users?.map((user) => (
+                <li key={user.id}>{user.name}</li>  // Muestra la lista de usuarios
+            ))}
+        </ul>
     );
 }
