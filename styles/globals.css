@@ -25,3 +25,18 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.user-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 8px;
+}
+
+.user-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+h1, h2 {
+  color: #333;
+}

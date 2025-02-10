@@ -5,7 +5,8 @@
 import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';  // Usamos la tienda de usuarios
 import { getUsers } from '@/services/userService';  // Importamos el servicio que obtiene los usuarios
-import { HttpError } from '@/errors/HttpError';  // Importamos la clase HttpError
+import { HttpError } from '@/errors/HttpError';
+import UserCard from "@/components/UserCard";  // Importamos la clase HttpError
 
 export default function UserList() {
     const [loading, setLoading] = useState(true);  // Para gestionar el estado de carga
@@ -40,9 +41,11 @@ export default function UserList() {
 
     return (
         <ul>
-            {users?.map((user) => (
-                <li key={user.id}>{user.name}</li>  // Muestra la lista de usuarios
-            ))}
+            <div className="user-list">
+                {users.map((user) => (
+                    <UserCard key={user.id} user={user}/>
+                ))}
+            </div>
         </ul>
     );
 }
