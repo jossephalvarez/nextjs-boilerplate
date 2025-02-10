@@ -1,14 +1,25 @@
-// store/userStore.ts
+import { create } from "zustand";
+import { getUsers } from "@/services/userService";
+import {User} from "@/types/User";
 
-import {create} from "zustand/react";
-import { User } from '@/types/User';
-
-type UserState = {
+interface UserStore {
     users: User[];
-    setUsers: (users: User[]) => void;
-};
+    loading: boolean;
+    error: string | null;
+    fetchUsers: () => Promise<void>;
+}
 
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserStore>((set) => ({
     users: [],
-    setUsers: (users) => set({ users }),
+    loading: false,
+    error: null,
+    fetchUsers: async () => {
+        set({ loading: true, error: null });
+        try {
+            const users = await getUsers();
+            set({ users, loading: false });
+        } catch (error) {
+            set({ error: "Error fetching users", loading: false });
+        }
+    },
 }));

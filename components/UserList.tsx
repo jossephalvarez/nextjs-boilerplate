@@ -2,30 +2,16 @@
 
 'use client';  // Marca este componente como Client Component
 
-import { useState, useEffect } from 'react';
-import { useUserStore } from '@/store/userStore';  // Usamos la tienda de usuarios
-import { getUsers } from '@/services/userService';  // Importamos el servicio que obtiene los usuarios
-import { HttpError } from '@/errors/HttpError';
-import UserCard from "@/components/UserCard";  // Importamos la clase HttpError
+import { useEffect } from "react";
+import { useUserStore } from "@/store/userStore";
+import UserCard from "./UserCard";
 
 export default function UserList() {
-    const users = useUserStore((state) => state.users);
-    const setUsers = useUserStore((state) => state.setUsers);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { users, loading, error, fetchUsers } = useUserStore();
 
     useEffect(() => {
-        getUsers()
-            .then(setUsers)
-            .catch((error) => {
-                if (error instanceof HttpError) {
-                    setError(`Error fetching users: ${error.message} (Status Code: ${error.statusCode})`);
-                } else {
-                    setError("An unexpected error occurred");
-                }
-            })
-            .finally(() => setLoading(false));
-    }, [setUsers]);
+        fetchUsers();
+    }, [fetchUsers]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
