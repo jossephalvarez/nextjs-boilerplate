@@ -34,6 +34,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /.idea/jsLinters/eslint.xml
+/.idea/sonarlint/*
 /.idea/sonarlint/issuestore/0/0/00861cac31c437dcc74bb945d3f67fd13dec49ef
 /.idea/sonarlint/issuestore/0/1/01bcf79a04cdf85fba325b0af12517c9dde57b30
 /.idea/sonarlint/issuestore/1/0/10a03f31c4dce92cb371e761ce9429428bb6c176
@@ -116,3 +117,11 @@ next-env.d.ts
 /.idea/sonarlint/securityhotspotstore/c/d/cdb55fb7b9550cf1c93c03e68dfe3882647e90dc
 /.idea/sonarlint/securityhotspotstore/e/6/e666171be0407053d2fd86f26d4c0a8b221647f6
 /.idea/sonarlint/securityhotspotstore/e/d/edc91858db3d22244f190ea07f114dd653e35a20
+/.idea/sonarlint/issuestore/7/1/71c20a341bfe32aa5cd5b4384e94f942bab6a7d3
+/.idea/sonarlint/issuestore/8/3/83a296de9d966d64a559bbe1105c216c0a2c3428
+/.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302
+/.idea/sonarlint/issuestore/index.pb
+/.idea/sonarlint/securityhotspotstore/7/1/71c20a341bfe32aa5cd5b4384e94f942bab6a7d3
+/.idea/sonarlint/securityhotspotstore/8/3/83a296de9d966d64a559bbe1105c216c0a2c3428
+/.idea/sonarlint/securityhotspotstore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302
+/.idea/sonarlint/securityhotspotstore/index.pb
